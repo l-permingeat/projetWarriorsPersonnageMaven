@@ -1,6 +1,8 @@
 package fr.ecoleNum.com.moteurDuJeu.projetwarriorspersonnage;
 
 //import fr.ecoleNum.com.BDD.projetwarriorspersonnage.Requete;
+
+import fr.ecoleNum.com.BDD.projetwarriorspersonnage.Requete;
 import fr.ecoleNum.com.BDD.projetwarriorspersonnage.RequeteTest;
 import fr.ecoleNum.com.exception.PersonnageHorsPlateauException;
 import fr.ecoleNum.com.personnage.projetwarriorspersonnage.Guerrier;
@@ -10,6 +12,9 @@ import fr.ecoleNum.com.plateau.projetwarriorspersonnage.Cellule;
 import fr.ecoleNum.com.plateau.projetwarriorspersonnage.DeVirtuel;
 import fr.ecoleNum.com.plateau.projetwarriorspersonnage.Plateau;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Game {
@@ -19,8 +24,8 @@ public class Game {
     Scanner scanner;
     private fr.ecoleNum.com.exception.PersonnageHorsPlateauException PersonnageHorsPlateauException;
     Personnage personnage;
-   // Connexion essai;
-    RequeteTest essai;
+    //  RequeteTest essai;
+    Requete personnageBDD;
 
 
     /* ***************************** Constructeur de main ********************************************* */
@@ -33,7 +38,8 @@ public class Game {
         this.plateau = new Plateau();
         this.scanner = new Scanner(System.in);
         this.PersonnageHorsPlateauException = new PersonnageHorsPlateauException();
-        this.essai=new RequeteTest();
+        // this.essai=new RequeteTest();
+        this.personnageBDD = new Requete();
     }
 
     /* ***************************** Fonction de départ ********************************************* */
@@ -47,8 +53,8 @@ public class Game {
         try {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Hello, go pour une super partie ! ");
-            System.out.println("Commençons par créer le personnage : Taper 1 \nPersonnage déja créé ? Commencer à jouer en tapant 2 \nQuitter ?  Taper 3");
-            essai.afficherRequete();
+            System.out.println("Commençons par créer le personnage : Taper 1 \nPersonnage déja créé ? Commencer à jouer en tapant 2 \nChoisir un personnage tout prêt ? Taper 3 \nQuitter ?  Taper 4");
+            //  essai.afficherRequete();
 
 
             int reponseChoix = scanner.nextInt();
@@ -60,6 +66,11 @@ public class Game {
                 calculerPosition();
 
             } else if (reponseChoix == 3) {
+
+                choixPersonnageBDD();
+
+
+            } else if (reponseChoix == 4) {
                 // met fin au jeux
                 System.out.print("A bientôt ! ^-^ ");
             } else {
@@ -102,6 +113,15 @@ public class Game {
         //appelle de la fonction pour demander au joueur s'il souhaite modifier le nom de son personnage
         questionConfirmationPersonnage();
 
+    }
+
+    public void choixPersonnageBDD() throws SQLException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        System.out.println("Les personnages disponibles : ");
+        personnageBDD.afficherRequete();
+        System.out.println("Taper le numéro de celui que vous souhaitez ");
+        int reponseChoixBdd = scanner.nextInt();
+        personnageBDD.affecationPersonnageBdd(reponseChoixBdd);
+        System.out.println("Votre personnage est un.e " + personnageBDD.getPersonnage());
     }
 
     /* ***************************** Fonction est ce que le personnage convient ? ********************************************* */
@@ -162,8 +182,9 @@ public class Game {
 
     /**
      * Fait avancer le personnage sur le plateau et indique ce qu'il y a sur la case
+     *
      * @param position attends en paramètre la position du joueur
-     * Appelle de la méthode decisionPersonnage
+     *                 Appelle de la méthode decisionPersonnage
      */
     public void avancerPersonnage(int position) throws PersonnageHorsPlateauException {
         System.out.println("Vous avez lancé les dés. " + personnage.getName() + " est sur la case " + position + " du plateau");
@@ -174,10 +195,11 @@ public class Game {
 
     /**
      * Propose aux joueurs des choix en fonction de ce qu'il rencontre sur la case
+     *
      * @param cellule, c'est l'objet qu'il y a dans la cellule (ennemi, vide, surprise...)
-     * Appelle de la méthode open pour indiquer ce qu'il y a dans ennemi, surprise ou vide
-     * Puis appelle de la méthode action qui déclenchera un combat si case ennemi ou une récupération d'arme/potion si surprise
-     * Enfin appelle la méthode calculerPosition pour relancer une boucle
+     *                 Appelle de la méthode open pour indiquer ce qu'il y a dans ennemi, surprise ou vide
+     *                 Puis appelle de la méthode action qui déclenchera un combat si case ennemi ou une récupération d'arme/potion si surprise
+     *                 Enfin appelle la méthode calculerPosition pour relancer une boucle
      */
     public void decisionPersonnage(Cellule cellule) {
         //action déclenche le combat ou la ramasse de surpise
