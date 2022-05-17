@@ -59,7 +59,7 @@ public class Sorcier extends Ennemi implements Cellule {
         if (personnage.getEquipement() == null) {
             //force d'attaque du personnage + force d'attaque de l'équipement
             force = personnage.getForceActuelle();
-        } else if ((personnage.getForceActuelle() + personnage.getEquipement().getNiveauAttaque()) < personnage.getForceMax()) {
+        } else if ((personnage.getForceActuelle() + personnage.getEquipement().getNiveauAttaque()) > personnage.getForceMax()) {
             force = personnage.getForceMax();
         }
         return force;

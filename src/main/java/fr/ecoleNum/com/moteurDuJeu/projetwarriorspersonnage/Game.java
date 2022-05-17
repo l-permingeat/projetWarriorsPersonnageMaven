@@ -20,12 +20,12 @@ import java.util.Scanner;
 public class Game {
     private DeVirtuel de;
     private Plateau plateau;
-    private int positionActuelle = 0;
-    Scanner scanner;
+    private int positionActuelle;
+    private Scanner scanner;
     private fr.ecoleNum.com.exception.PersonnageHorsPlateauException PersonnageHorsPlateauException;
-    Personnage personnage;
+    private Personnage personnage;
     //  RequeteTest essai;
-    Requete personnageBDD;
+    private Requete personnageBDD;
 
 
     /* ***************************** Constructeur de main ********************************************* */
@@ -40,6 +40,7 @@ public class Game {
         this.PersonnageHorsPlateauException = new PersonnageHorsPlateauException();
         // this.essai=new RequeteTest();
         this.personnageBDD = new Requete();
+        this.positionActuelle=0;
     }
 
     /* ***************************** Fonction de départ ********************************************* */

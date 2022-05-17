@@ -7,11 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
 
 public class Requete {
     private Connexion connect;
@@ -34,9 +31,13 @@ public class Requete {
         this.personnage = personnage;
     }
 
-
     /* ***************************** Requete de tous les personnages ********************************************* */
 
+    /**
+     * Permet de faire une requete global sur la la table HeroChoice
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void requeteGet() throws SQLException, ClassNotFoundException {
         try {
             connect.connectionBDD();
@@ -54,6 +55,11 @@ public class Requete {
 
     /* ***************************** Affiche tous les personnage ********************************************* */
 
+    /**
+     * Met en forme et affiche le résulat de la méthode requeteGet
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void afficherRequete() throws SQLException, ClassNotFoundException {
         requeteGet();
 
@@ -75,7 +81,16 @@ public class Requete {
     /* ***************************** Retourne un nouveau personnage ********************************************* */
 
 
-
+    /**
+     * Fait une requête sur un ID d'un personnage et instancie un nouveau personnage
+     * @param key
+     * @throws SQLException
+     * @throws NoSuchMethodException
+     * @throws ClassNotFoundException
+     * @throws InvocationTargetException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     public void affecationPersonnageBdd(int key) throws SQLException, NoSuchMethodException, ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException {
         try {
             connect.connectionBDD();

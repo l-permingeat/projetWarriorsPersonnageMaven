@@ -9,6 +9,12 @@ public class Connexion {
     private String typeBDD = "jdbc:mysql://localhost/projetWarriors";
     private Connection connexionClassConnection;
 
+    /**
+     * Permet de se connecter à la BDD
+     * @return l'accés à la BDD
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public Connection connectionBDD() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         connexionClassConnection = DriverManager.getConnection(typeBDD, userName, password);
