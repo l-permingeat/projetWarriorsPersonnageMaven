@@ -11,6 +11,7 @@ public class Connexion {
 
     /**
      * Permet de se connecter à la BDD
+     *
      * @return l'accés à la BDD
      * @throws SQLException
      * @throws ClassNotFoundException
@@ -19,6 +20,17 @@ public class Connexion {
         Class.forName("com.mysql.cj.jdbc.Driver");
         connexionClassConnection = DriverManager.getConnection(typeBDD, userName, password);
         return connexionClassConnection;
+    }
+
+    public void close(Connection connection) {
+        if (connection != null) {
+            try {
+                //Déconnexion de la connexion DB
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

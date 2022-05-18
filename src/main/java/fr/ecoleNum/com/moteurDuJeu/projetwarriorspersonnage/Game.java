@@ -2,8 +2,7 @@ package fr.ecoleNum.com.moteurDuJeu.projetwarriorspersonnage;
 
 //import fr.ecoleNum.com.BDD.projetwarriorspersonnage.Requete;
 
-import fr.ecoleNum.com.BDD.projetwarriorspersonnage.Requete;
-import fr.ecoleNum.com.BDD.projetwarriorspersonnage.RequeteTest;
+import fr.ecoleNum.com.BDD.projetwarriorspersonnage.RequetePersonnage;
 import fr.ecoleNum.com.exception.PersonnageHorsPlateauException;
 import fr.ecoleNum.com.personnage.projetwarriorspersonnage.Guerrier;
 import fr.ecoleNum.com.personnage.projetwarriorspersonnage.Magicien;
@@ -12,7 +11,6 @@ import fr.ecoleNum.com.plateau.projetwarriorspersonnage.Cellule;
 import fr.ecoleNum.com.plateau.projetwarriorspersonnage.DeVirtuel;
 import fr.ecoleNum.com.plateau.projetwarriorspersonnage.Plateau;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -25,7 +23,7 @@ public class Game {
     private fr.ecoleNum.com.exception.PersonnageHorsPlateauException PersonnageHorsPlateauException;
     private Personnage personnage;
     //  RequeteTest essai;
-    private Requete personnageBDD;
+    private RequetePersonnage personnageBDD;
 
 
     /* ***************************** Constructeur de main ********************************************* */
@@ -39,7 +37,7 @@ public class Game {
         this.scanner = new Scanner(System.in);
         this.PersonnageHorsPlateauException = new PersonnageHorsPlateauException();
         // this.essai=new RequeteTest();
-        this.personnageBDD = new Requete();
+        this.personnageBDD = new RequetePersonnage();
         this.positionActuelle=0;
     }
 
@@ -90,8 +88,7 @@ public class Game {
      * Permet de créer le personnage, guerrier ou magicien
      * A la fin appelle de la méthode questionConfirmationPersonnage
      */
-    public void creerPersonnage() {
-        //j'initialise une variable de type objet issue de la class Personnage
+    public void creerPersonnage() throws SQLException, ClassNotFoundException {
         try {
             System.out.print("Souhaitez vous créer un magicien ou un guerrier ? ");
             String reponseTypePersonnage = scanner.nextLine();
@@ -117,12 +114,14 @@ public class Game {
     }
 
     public void choixPersonnageBDD() throws SQLException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        System.out.println("Les personnages disponibles : ");
+        System.out.println("Voici les personnages disponibles,\nTaper le numéro de celui que vous souhaitez  ");
         personnageBDD.afficherRequete();
-        System.out.println("Taper le numéro de celui que vous souhaitez ");
         int reponseChoixBdd = scanner.nextInt();
         personnageBDD.affecationPersonnageBdd(reponseChoixBdd);
         System.out.println("Votre personnage est un.e " + personnageBDD.getPersonnage());
+        personnage=personnageBDD.getPersonnage();
+        //appel de la fonction qui calcule la position puis qui fais avancer le personnage
+        calculerPosition();
     }
 
     /* ***************************** Fonction est ce que le personnage convient ? ********************************************* */
@@ -131,12 +130,13 @@ public class Game {
      * Demande au joueur s'il veut modifier le nom du personnage
      * Quand le joueur est satisfait du nom, appelle de la méthode calculerPosition
      */
-    public void questionConfirmationPersonnage() {
+    public void questionConfirmationPersonnage() throws SQLException, ClassNotFoundException {
         System.out.println("Votre personnage vous convient ? Taper 1 \n Sinon, taper 2 ");
         int reponseChoix = scanner.nextInt();
 
         if (reponseChoix == 1) {
             System.out.println(" \nSuper, nous pouvons passer à la suite !  ");
+            personnageBDD.requetePostPerso(personnage);
             //appel de la fonction qui calcule la position puis qui fais avancer le personnage
             calculerPosition();
         } else if (reponseChoix == 2) {
@@ -150,7 +150,7 @@ public class Game {
      * Modifie le nom du personnage si le joueur le souhaite
      * Si le joueur modifie le nom de son personnage, appelle de la méthode questionConfirmationPersonnage
      */
-    public void modifierNomPersonnage() {
+    public void modifierNomPersonnage() throws SQLException, ClassNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Comment voulez vous renommer votre personnage ? ");
         String reponseModifNomPersonnage = scanner.nextLine();
@@ -188,7 +188,7 @@ public class Game {
      *                 Appelle de la méthode decisionPersonnage
      */
     public void avancerPersonnage(int position) throws PersonnageHorsPlateauException {
-        System.out.println("Vous avez lancé les dés. " + personnage.getName() + " est sur la case " + position + " du plateau");
+        System.out.println("\nVous avez lancé les dés. " + personnage.getName() + " est sur la case " + position + " du plateau");
         decisionPersonnage(this.plateau.contenuTabIndiceI(position));
     }
 

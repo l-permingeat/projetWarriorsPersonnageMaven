@@ -72,10 +72,11 @@ public class Dragon extends Ennemi {
     private int calculForce(Personnage personnage) {
         int force = 0;
         if (personnage.getEquipement() == null) {
-            //force d'attaque du personnage + force d'attaque de l'équipement
             force = personnage.getForceActuelle();
-        } else if ((personnage.getForceActuelle() + personnage.getEquipement().getNiveauAttaque()) < personnage.getForceMax()) {
+        } else if ((personnage.getForceActuelle() + personnage.getEquipement().getNiveauAttaque()) > personnage.getForceMax()) {
             force = personnage.getForceMax();
+        }else if ((personnage.getForceActuelle() + personnage.getEquipement().getNiveauAttaque()) < personnage.getForceMax()) {
+            force = personnage.getForceActuelle() + personnage.getEquipement().getNiveauAttaque();
         }
         return force;
     }
