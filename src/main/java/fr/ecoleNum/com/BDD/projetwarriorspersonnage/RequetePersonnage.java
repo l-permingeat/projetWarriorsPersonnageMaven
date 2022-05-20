@@ -93,7 +93,7 @@ public class RequetePersonnage implements Requete {
     /**
      * Fait une requête sur un ID d'un personnage et instancie un nouveau personnage
      *
-     * @param key
+     * @param key correspond à l'id du personnage, id que le joueur aura selectionné
      * @throws SQLException
      * @throws NoSuchMethodException
      * @throws ClassNotFoundException
@@ -130,7 +130,12 @@ public class RequetePersonnage implements Requete {
 
     /* ***************************** Autre fonction ********************************************* */
 
-
+    /**
+     * Enregistre un personnage dans la BDD
+     * @param personnage le personnage que le joueur aura créé
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void requetePostPerso(Personnage personnage) throws SQLException, ClassNotFoundException {
         try {
           //  System.out.println("methode requete " + personnage);
@@ -159,8 +164,6 @@ public class RequetePersonnage implements Requete {
     public void requeteDelete() throws SQLException, ClassNotFoundException {
 
     }
-
-
 
     /* ***************************** Getter et Setter ********************************************* */
 

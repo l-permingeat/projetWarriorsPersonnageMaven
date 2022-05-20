@@ -24,6 +24,7 @@ public class Game {
     private Personnage personnage;
     //  RequeteTest essai;
     private RequetePersonnage personnageBDD;
+    private String dataBaseOk;
 
 
     /* ***************************** Constructeur de main ********************************************* */
@@ -31,14 +32,15 @@ public class Game {
     /**
      *
      */
-    public Game() {
+    public Game(String dataBaseOkArgs) {
         this.de = new DeVirtuel(6);
         this.plateau = new Plateau();
         this.scanner = new Scanner(System.in);
         this.PersonnageHorsPlateauException = new PersonnageHorsPlateauException();
         // this.essai=new RequeteTest();
         this.personnageBDD = new RequetePersonnage();
-        this.positionActuelle=0;
+        this.positionActuelle = 0;
+        this.dataBaseOk = dataBaseOkArgs;
     }
 
     /* ***************************** Fonction de départ ********************************************* */
@@ -52,7 +54,12 @@ public class Game {
         try {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Hello, go pour une super partie ! ");
-            System.out.println("Commençons par créer le personnage : Taper 1 \nPersonnage déja créé ? Commencer à jouer en tapant 2 \nChoisir un personnage tout prêt ? Taper 3 \nQuitter ?  Taper 4");
+            System.out.println("Commençons par créer le personnage : Taper 1 \nPersonnage déja créé ? Commencer à jouer en tapant 2");
+            //Condition à mettre si BDD ou pas
+            if (dataBaseOk != null) {
+                System.out.println("Choisir un personnage tout prêt ? Taper 3");
+            }
+            System.out.println("Quitter ?  Taper 0");
             //  essai.afficherRequete();
 
 
@@ -64,16 +71,14 @@ public class Game {
             } else if (reponseChoix == 2) {
                 calculerPosition();
 
-            } else if (reponseChoix == 3) {
-
+            } else if (reponseChoix == 3 && (dataBaseOk != null)) {
                 choixPersonnageBDD();
 
-
-            } else if (reponseChoix == 4) {
+            } else if (reponseChoix == 0) {
                 // met fin au jeux
                 System.out.print("A bientôt ! ^-^ ");
             } else {
-                System.out.println("Mauvaise saisie \n Vous devez taper 1, 2 ou 3");
+                System.out.println("Mauvaise saisie \n Vous devez taper 0,1, 2, 3 ou 4");
                 start();
             }
         } catch (Exception e) {
@@ -119,7 +124,7 @@ public class Game {
         int reponseChoixBdd = scanner.nextInt();
         personnageBDD.affecationPersonnageBdd(reponseChoixBdd);
         System.out.println("Votre personnage est un.e " + personnageBDD.getPersonnage());
-        personnage=personnageBDD.getPersonnage();
+        personnage = personnageBDD.getPersonnage();
         //appel de la fonction qui calcule la position puis qui fais avancer le personnage
         calculerPosition();
     }
@@ -136,7 +141,10 @@ public class Game {
 
         if (reponseChoix == 1) {
             System.out.println(" \nSuper, nous pouvons passer à la suite !  ");
-            personnageBDD.requetePostPerso(personnage);
+            if (dataBaseOk != null) {
+                personnageBDD.requetePostPerso(personnage);
+            }
+
             //appel de la fonction qui calcule la position puis qui fais avancer le personnage
             calculerPosition();
         } else if (reponseChoix == 2) {

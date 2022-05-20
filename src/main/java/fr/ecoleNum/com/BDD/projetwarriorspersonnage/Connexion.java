@@ -22,6 +22,11 @@ public class Connexion {
         return connexionClassConnection;
     }
 
+    /**
+     * Deconnexion de la BDD
+     * @param connection connection à la BDD
+     */
+
     public void close(Connection connection) {
         if (connection != null) {
             try {

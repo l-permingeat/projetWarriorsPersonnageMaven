@@ -19,7 +19,7 @@ public class Arme extends Equipement implements Cellule {
     @Override
     public void action(Personnage personnage) {
         if (personnage instanceof Guerrier) {
-            System.out.println("Une " + getName() + " !  Pour la ramasser taper 1 \nPartir ? 2 ");
+            System.out.println("Une " + getName() + " !  Pour la ramasser taper 1 \nPartir ? Taper 2 ");
 
             if (getScanner().nextInt() == 2) {
                 System.out.println("A bientôt !");
